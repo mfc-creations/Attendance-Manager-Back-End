@@ -109,10 +109,12 @@ exports.markAttendance = async (req, res) => {
 
 exports.checkAttendance = async (req, res) => {
   try {
-    const res = await Attendance.find({
-      $and: [{ user: req.user.id }, { date: req.body.date }],
+    const stu = await Attendance.findOne({
+      $and: [{ student: req.user.id }, { date: req.body.date }],
     });
-    res.status(200).json({ success: true, data: res });
+    res
+      .status(200)
+      .json({ success: true, data: stu ? stu : { present: false } });
   } catch (err) {
     res.status(400).json({ success: false, err });
   }
